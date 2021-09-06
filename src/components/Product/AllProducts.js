@@ -50,7 +50,7 @@ const AllProducts = (props) => {
                     id: product.id,
                     name: product.name,
                     brand: product.brand.name,
-                    expiryDate:  `${product.expiryDate[0]}-${product.expiryDate[1]}-${product.expiryDate[2]}`,
+                    expiryDate:  expiryDate.toLocaleDateString(),
                     status: today > expiryDate ? <Fragment> <Icon icon="ban"/> Expired </Fragment> :
                         isToday(expiryDate) ? <Fragment> <Icon icon="exclamation-circle"/> Due </Fragment> : <Fragment> <Icon icon="smile-o"/> Good </Fragment>
                 });
