@@ -34,22 +34,25 @@ const AllProducts = (props) => {
             const responseData = await response.json();
 
             const loadedProducts = [];
-            const now = new Date();
+
+            let today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            let isToday = (date) => {
+                return date.getDate() === today.getDate() &&
+                    date.getMonth() === today.getMonth() &&
+                    date.getFullYear() === today.getFullYear();
+            }
 
             responseData.forEach((product) => {
+                const expiryDate = new Date(product.expiryDate);
                 loadedProducts.push({
                     id: product.id,
                     name: product.name,
                     brand: product.brand.name,
                     expiryDate:  `${product.expiryDate[0]}-${product.expiryDate[1]}-${product.expiryDate[2]}`,
-                    status: now > new Date(product.expiryDate) ?
-                        <Fragment>
-                            <Icon icon="ban"/> Expired
-                        </Fragment> :
-                        <Fragment>
-                            <Icon icon="smile-o"/> Good
-                        </Fragment>
-
+                    status: today > expiryDate ? <Fragment> <Icon icon="ban"/> Expired </Fragment> :
+                        isToday(expiryDate) ? <Fragment> <Icon icon="exclamation-circle"/> Due </Fragment> : <Fragment> <Icon icon="smile-o"/> Good </Fragment>
                 });
             });
             setProducts(loadedProducts);

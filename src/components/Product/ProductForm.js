@@ -16,7 +16,8 @@ const ProductForm = (props) => {
     };
 
     const onExpiryDateChange = (event) => {
-        const expirationDate = new Date(Date.UTC( event.getUTCFullYear(), event.getUTCMonth(), event.getUTCDay()));
+        const expirationDate =
+            new Date(Date.UTC(event.getUTCFullYear(), event.getUTCMonth(), event.getUTCDate()));
         setExpiryDate(expirationDate.toJSON());
     };
 
