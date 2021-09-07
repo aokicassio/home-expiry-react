@@ -6,7 +6,7 @@ const { Column, HeaderCell, Cell } = Table;
 const ProductsTable = (props) => {
     
     return (
-        <Panel header={props.header} bordered>
+        <Panel header={props.heading} bordered>
             <p>{props.description}</p><br/>
             <Table autoHeight={true} data={props.products}>
                 <Column flexGrow={2} hidden>

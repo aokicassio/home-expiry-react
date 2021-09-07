@@ -72,7 +72,7 @@ const Products = (props) => {
 
     return (
         <ProductsTable
-            header={props.header}
+            heading={props.heading}
             description={props.description}
             products={products}/>
     );

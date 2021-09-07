@@ -37,10 +37,9 @@ function App() {
                         <Grid fluid>
                             <Row>
                                 <Products endpoint="/expiration/due"
-                                          header={"Due Products"}
+                                          heading={"Due Products"}
                                           description={"Products that are due to expire today."}
                                           refreshKey={refreshKey} updateRefreshKey={setRefreshKey}/>
-
                             </Row>
                         </Grid>
                     </Route>
@@ -49,7 +48,7 @@ function App() {
                         <Grid fluid>
                             <Row>
                                 <Products endpoint="/expiration/expired"
-                                          header={"Expired Products"}
+                                          heading={"Expired Products"}
                                           description={"Products that have already expired."}
                                           refreshKey={refreshKey} updateRefreshKey={setRefreshKey}/>
                             </Row>
