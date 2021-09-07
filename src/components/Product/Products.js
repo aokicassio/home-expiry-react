@@ -1,11 +1,13 @@
-import { Icon } from 'rsuite';
-
-import { useState, useEffect, Fragment } from "react";
+import {Fragment, useEffect, useState} from "react";
+import {Icon, Loader} from "rsuite";
 import ProductsTable from "./ProductsTable";
 
-const ExpiredProducts = (props) => {
+const Products = (props) => {
+
+    const endpoint = props.endpoint;
 
     const [products, setProducts] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -15,8 +17,7 @@ const ExpiredProducts = (props) => {
 
             let headers = new Headers();
 
-            const url = process.env.REACT_APP_HOST + '/expiration/expired';
-
+            const url = process.env.REACT_APP_HOST + endpoint;
             headers.set('Authorization', 'Basic ' + btoa(authString));
             headers.set('Accept', 'application/json');
             headers.set('Content-Type', 'application/json');
@@ -34,37 +35,47 @@ const ExpiredProducts = (props) => {
 
             const loadedProducts = [];
 
+            let today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            let isToday = (date) => {
+                return date.getDate() === today.getDate() &&
+                    date.getMonth() === today.getMonth() &&
+                    date.getFullYear() === today.getFullYear();
+            }
+
             responseData.forEach((product) => {
+                const expiryDate = new Date(product.expiryDate);
                 loadedProducts.push({
                     id: product.id,
                     name: product.name,
                     brand: product.brand.name,
-                    expiryDate: `${product.expiryDate[0]}-${product.expiryDate[1]}-${product.expiryDate[2]}`,
-                    status:
-                        <Fragment>
-                            <Icon icon="ban"/> Expired
-                        </Fragment>
+                    expiryDate:  expiryDate.toLocaleDateString(),
+                    status: today > expiryDate ? <Fragment> <Icon icon="ban"/> Expired </Fragment> :
+                        isToday(expiryDate) ? <Fragment> <Icon icon="exclamation-circle"/> Due </Fragment> : <Fragment> <Icon icon="smile-o"/> Good </Fragment>
                 });
             });
             setProducts(loadedProducts);
+            setIsLoading(false);
         };
 
         fetchProducts().catch((error) => {
             console.log(error);
         });
-    }, []);
-    
+    }, [props.refreshKey, endpoint]);
+
+    if (isLoading) {
+        return (
+            <Loader content="Loading..." />
+        );
+    }
+
     return (
         <ProductsTable
-            header={"Expired Products"}
-            description={"Products that have already expired."}
+            header={props.header}
+            description={props.description}
             products={products}/>
     );
-
 }
 
-export default ExpiredProducts;
-
-
-
-
+export default Products;

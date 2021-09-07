@@ -1,17 +1,14 @@
 import 'rsuite/dist/styles/rsuite-dark.css';
 
-import {Container, Content, Grid, Row } from 'rsuite';
-
-import ProductForm from "./components/Product/ProductForm";
-import AllProducts from "./components/Product/AllProducts";
-import Navigation from "./components/Layout/Navigation";
-
 import { useState } from 'react';
+import {Container, Content, Grid, Row } from 'rsuite';
 import { Route, Switch } from 'react-router-dom';
+
+import Navigation from "./components/Layout/Navigation";
 import Config from "./components/Config/Config";
 import Home from "./components/Home/Home";
-import ExpiredProducts from "./components/Product/ExpiredProducts";
-import DueProducts from "./components/Product/DueProducts";
+import ProductForm from "./components/Product/ProductForm";
+import Products from "./components/Product/Products";
 
 function App() {
     const [refreshKey, setRefreshKey] = useState(0);
@@ -31,7 +28,7 @@ function App() {
                             </Row>
                             <br/>
                             <Row>
-                                <AllProducts refreshKey={refreshKey} updateRefreshKey={setRefreshKey}/>
+                                <Products endpoint="/product" refreshKey={refreshKey} updateRefreshKey={setRefreshKey}/>
                             </Row>
                         </Grid>
                     </Route>
@@ -39,7 +36,11 @@ function App() {
                     <Route exact  path="/due">
                         <Grid fluid>
                             <Row>
-                                <DueProducts />
+                                <Products endpoint="/expiration/due"
+                                          header={"Due Products"}
+                                          description={"Products that are due to expire today."}
+                                          refreshKey={refreshKey} updateRefreshKey={setRefreshKey}/>
+
                             </Row>
                         </Grid>
                     </Route>
@@ -47,7 +48,10 @@ function App() {
                     <Route exact  path="/expired">
                         <Grid fluid>
                             <Row>
-                                <ExpiredProducts />
+                                <Products endpoint="/expiration/expired"
+                                          header={"Expired Products"}
+                                          description={"Products that have already expired."}
+                                          refreshKey={refreshKey} updateRefreshKey={setRefreshKey}/>
                             </Row>
                         </Grid>
                     </Route>
